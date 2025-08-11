@@ -1,9 +1,13 @@
 package dev.java10x.Fridge.service;
 
+import dev.java10x.Fridge.dto.FoodDTO;
+import dev.java10x.Fridge.mapper.FoodMapper;
 import dev.java10x.Fridge.model.Food;
 import dev.java10x.Fridge.repository.FoodRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FoodService {
@@ -14,12 +18,23 @@ public class FoodService {
         _foodRepository = foodRepository;
     }
 
-    //Listar
-    public List<Food> getAll() {return _foodRepository.findAll();}
+    // Listar todos (retorna lista de DTOs)
+    public List<FoodDTO> getAll() {
+        List<Food> foods = _foodRepository.findAll();
+        return foods.stream()
+                .map(FoodMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 
-    //Criar
-    public Food save(Food food) {return _foodRepository.save(food);}
+    // Criar um novo (recebe DTO e retorna DTO)
+    public FoodDTO save(FoodDTO dto) {
+        Food food = FoodMapper.toEntity(dto);
+        Food saved = _foodRepository.save(food);
+        return FoodMapper.toDTO(saved);
+    }
 
-    //Deletar
-    public void delete(Long id){_foodRepository.deleteById(id);}
+    // Deletar (por id)
+    public void delete(Long id) {
+        _foodRepository.deleteById(id);
+    }
 }
