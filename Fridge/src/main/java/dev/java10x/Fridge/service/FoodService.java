@@ -18,19 +18,19 @@ public class FoodService {
         _foodRepository = foodRepository;
     }
 
-    // Listar todos (retorna lista de DTOs)
+    // Listar todos (retorna lista de Records)
     public List<FoodDTO> getAll() {
-        List<Food> foods = _foodRepository.findAll();
-        return foods.stream()
-                .map(FoodMapper::toDTO)
+        return _foodRepository.findAll()
+                .stream()
+                .map(FoodMapper::toDTO)  // mapper já cria record
                 .collect(Collectors.toList());
     }
 
-    // Criar um novo (recebe DTO e retorna DTO)
+    // Criar um novo (recebe record e retorna record)
     public FoodDTO save(FoodDTO dto) {
-        Food food = FoodMapper.toEntity(dto);
-        Food saved = _foodRepository.save(food);
-        return FoodMapper.toDTO(saved);
+        Food food = FoodMapper.toEntity(dto); // converte record para entidade
+        Food saved = _foodRepository.save(food); // salva no banco
+        return FoodMapper.toDTO(saved); // converte de volta para record
     }
 
     // Deletar (por id)

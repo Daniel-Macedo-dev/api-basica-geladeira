@@ -5,21 +5,23 @@ import dev.java10x.Fridge.model.Food;
 
 public class FoodMapper {
 
+    // Entidade → Record
     public static FoodDTO toDTO(Food food) {
-        FoodDTO dto = new FoodDTO();
-        dto.setId(food.getId());
-        dto.setName(food.getName());
-        dto.setExpirationDate(food.getExpirationDate());
-        dto.setQuantity(food.getQuantity());
-        return dto;
+        return new FoodDTO(
+                food.getId(),
+                food.getName(),
+                food.getExpirationDate(),
+                food.getQuantity()
+        );
     }
 
+    // Record → Entidade
     public static Food toEntity(FoodDTO dto) {
         Food food = new Food();
-        food.setId(dto.getId());
-        food.setName(dto.getName());
-        food.setExpirationDate(dto.getExpirationDate());
-        food.setQuantity(dto.getQuantity());
+        food.setId(dto.id());            // record gera getters com o mesmo nome do campo
+        food.setName(dto.name());
+        food.setExpirationDate(dto.expirationDate());
+        food.setQuantity(dto.quantity());
         return food;
     }
 }
