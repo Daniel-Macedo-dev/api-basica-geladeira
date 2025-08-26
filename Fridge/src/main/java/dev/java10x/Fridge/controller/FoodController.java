@@ -12,9 +12,7 @@ public class FoodController {
 
     private final FoodService _foodService;
 
-    public FoodController(FoodService foodService) {
-        _foodService = foodService;
-    }
+    public FoodController(FoodService foodService) {_foodService = foodService;}
 
     @GetMapping
     public List<FoodDTO> getAll() {
