@@ -2,6 +2,7 @@ package dev.java10x.Fridge.controller;
 
 import dev.java10x.Fridge.dto.FoodDTO;
 import dev.java10x.Fridge.service.FoodService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,17 +16,26 @@ public class FoodController {
     public FoodController(FoodService foodService) {_foodService = foodService;}
 
     @GetMapping
-    public List<FoodDTO> getAll() {
-        return _foodService.getAll();
+    public ResponseEntity<List<FoodDTO>> getAll() {
+        return ResponseEntity.ok(_foodService.getAll());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<FoodDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(_foodService.getById(id));
+    }
+
 
     @PostMapping
-    public FoodDTO create(@RequestBody FoodDTO foodDTO) {
-        return _foodService.save(foodDTO);
+    public ResponseEntity<FoodDTO> create(@RequestBody FoodDTO foodDTO) {
+        FoodDTO saved = _foodService.save(foodDTO);
+        return ResponseEntity.ok(saved);
     }
 
+
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         _foodService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

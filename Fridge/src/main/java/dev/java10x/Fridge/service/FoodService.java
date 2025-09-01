@@ -25,6 +25,12 @@ public class FoodService {
                 .map(FoodMapper::toDTO)
                 .collect(Collectors.toList());
     }
+    public FoodDTO getById(Long id) {
+        Food food = _foodRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("id não encontrado"));
+        return FoodMapper.toDTO(food);
+    }
+
 
     // Criar um novo (recebe DTO e retorna DTO)
     public FoodDTO save(FoodDTO dto) {
