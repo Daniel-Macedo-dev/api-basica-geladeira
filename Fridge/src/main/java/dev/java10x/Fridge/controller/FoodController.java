@@ -15,6 +15,13 @@ public class FoodController {
 
     public FoodController(FoodService foodService) {_foodService = foodService;}
 
+
+    @PostMapping
+    public ResponseEntity<FoodDTO> create(@RequestBody FoodDTO foodDTO) {
+        FoodDTO saved = _foodService.save(foodDTO);
+        return ResponseEntity.ok(saved);
+    }
+
     @GetMapping
     public ResponseEntity<List<FoodDTO>> getAll() {
         return ResponseEntity.ok(_foodService.getAll());
@@ -25,13 +32,17 @@ public class FoodController {
         return ResponseEntity.ok(_foodService.getById(id));
     }
 
-
-    @PostMapping
-    public ResponseEntity<FoodDTO> create(@RequestBody FoodDTO foodDTO) {
-        FoodDTO saved = _foodService.save(foodDTO);
-        return ResponseEntity.ok(saved);
+    @PutMapping("/{id}")
+    public ResponseEntity<FoodDTO> update(@PathVariable Long id, @RequestBody FoodDTO foodDTO) {
+        FoodDTO updated = _foodService.update(id, foodDTO);
+        return ResponseEntity.ok(updated);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<FoodDTO> patch(@PathVariable Long id, @RequestBody FoodDTO foodDTO) {
+        FoodDTO patched = _foodService.patch(id, foodDTO);
+        return ResponseEntity.ok(patched);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

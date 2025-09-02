@@ -18,25 +18,49 @@ public class FoodService {
         _foodRepository = foodRepository;
     }
 
-    // Listar todos (retorna lista de DTOs)
+    // Criar um novo (recebe DTO e retorna DTO)
+    public FoodDTO save(FoodDTO dto) {
+        Food food = FoodMapper.toEntity(dto);
+        Food saved = _foodRepository.save(food);
+        return FoodMapper.toDTO(saved);
+    }
+
+    // find all
     public List<FoodDTO> getAll() {
         List<Food> foods = _foodRepository.findAll();
         return foods.stream()
                 .map(FoodMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    //find by id
     public FoodDTO getById(Long id) {
         Food food = _foodRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("id não encontrado"));
         return FoodMapper.toDTO(food);
     }
 
+    //update -> put e patch
+    public FoodDTO update(Long id, FoodDTO dto) {
+        Food existingFood = _foodRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("id não encontrado"));
+        existingFood.setName(dto.getName());
+        existingFood.setQuantity(dto.getQuantity());
+        existingFood.setExpirationDate(dto.getExpirationDate());
 
-    // Criar um novo (recebe DTO e retorna DTO)
-    public FoodDTO save(FoodDTO dto) {
-        Food food = FoodMapper.toEntity(dto);
-        Food saved = _foodRepository.save(food);
-        return FoodMapper.toDTO(saved);
+        Food updated = _foodRepository.save(existingFood);
+        return FoodMapper.toDTO(updated);
+    }
+
+    public FoodDTO patch(Long id, FoodDTO dto) {
+        Food existingFood = _foodRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("id não encontrado"));
+        if (dto.getName() != null) existingFood.setName(dto.getName());
+        if (dto.getQuantity() != null) existingFood.setQuantity(dto.getQuantity());
+        if (dto.getExpirationDate() != null) existingFood.setExpirationDate(dto.getExpirationDate());
+
+        Food updated = _foodRepository.save(existingFood);
+        return FoodMapper.toDTO(updated);
     }
 
     // Deletar (por id)
