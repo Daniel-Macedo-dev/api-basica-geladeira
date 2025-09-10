@@ -1,0 +1,151 @@
+openapi: 3.0.1
+info:
+  title: Fridge API
+  version: v1
+servers:
+  - url: http://localhost:8080
+    description: API para gerenciamento de alimentos na geladeira
+paths:
+  /food:
+    get:
+      summary: Listar todos os alimentos
+      tags:
+        - food-controller
+      operationId: getAll
+      responses:
+        '200':
+          description: Lista de alimentos retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Food'
+    post:
+      summary: Criar novo alimento
+      tags:
+        - food-controller
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Food'
+      responses:
+        '201':
+          description: Alimento criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Food'
+        '400':
+          description: Erro na requisição
+  /food/{id}:
+    get:
+      summary: Buscar alimento por ID
+      tags:
+        - food-controller
+      operationId: getById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Alimento encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Food'
+        '404':
+          description: Alimento não encontrado
+    put:
+      summary: Substituir alimento por ID
+      tags:
+        - food-controller
+      operationId: update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Food'
+      responses:
+        '200':
+          description: Alimento atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Food'
+        '404':
+          description: Alimento não encontrado
+    patch:
+      summary: Atualizar parcialmente alimento
+      tags:
+        - food-controller
+      operationId: patch
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Food'
+      responses:
+        '200':
+          description: Alimento atualizado parcialmente com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Food'
+        '404':
+          description: Alimento não encontrado
+    delete:
+      summary: Deletar alimento por ID
+      tags:
+        - food-controller
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Alimento deletado com sucesso
+        '404':
+          description: Alimento não encontrado
+components:
+  schemas:
+    Food:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        categoria:
+          type: string
+        validade:
+          type: string
+          format: date
